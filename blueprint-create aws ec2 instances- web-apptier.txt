@@ -1,0 +1,70 @@
+variable access_key {}
+variable secret_key {}
+
+
+# Configure the AWS Provider (Access Key/ Secret Key can be put in here if required)
+provider "aws" {
+  region = var.sit_region
+  access_key = var.access_key
+  secret_key = var.secret_key
+}
+
+#EC2 SIT
+resource "aws_instance" "testapp_ec2-01" {
+  ami           = "ami-0925a09a52d18d09a" 
+  instance_type = var.sit_ec2_type					 
+  availability_zone = var.sit_ec2_availability_zone	 
+  subnet_id = "subnet-048cbd280a20c4976"		
+  root_block_device {
+    volume_size = var.root_size
+  }
+  key_name = "sit_ssh_key_pair"
+   
+}
+
+resource "aws_instance" "testweb_ec2-01" {
+  ami           = "ami-0925a09a52d18d09a" 
+  instance_type = var.sit_ec2_type					 
+  availability_zone = var.sit_ec2_availability_zone2	 
+  subnet_id = "subnet-0b3c21e895b587b05"		
+  root_block_device {
+    volume_size = var.root_size
+  }
+  key_name = "sit_ssh_key_pair"
+   
+}
+
+#Variables 
+
+
+#Variable for EC2 type
+variable "sit_ec2_type" {
+  default = "t2.micro"
+}
+
+#variable for availability zone a
+variable "sit_subnet_availability_zone"{
+  default = "eu-west-2a"
+}
+
+
+# variable to set the region
+variable "sit_region" {
+  default = "eu-west-2"
+}
+
+#Varianle for SIT EC2 AZ
+variable "sit_ec2_availability_zone" {
+  default = "eu-west-2a"
+}
+
+variable "sit_ec2_availability_zone2" {
+  default = "eu-west-2b"
+}
+
+ 
+#Variable for the root EBS size
+variable "root_size" {
+  default = "10"
+}
+ 
